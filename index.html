@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🏁 Project Yako - Sistema de Carreras GTA RP</title>
+    <meta name="description" content="Sistema profesional de gestión de carreras para GTA RP - Project Yako">
+    <meta name="author" content="marioovlc">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏁</text></svg>">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+</head>
+<body>
+    <div class="app">
+        <!-- Loading Screen -->
+        <div class="loading-screen" id="loadingScreen">
+            <div class="loading-content">
+                <div class="loading-logo">
+                    <i class="fas fa-flag-checkered"></i>
+                </div>
+                <div class="loading-text">Project Yako</div>
+                <div class="loading-version">v1.0 - Mario Edition</div>
+                <div class="loading-bar">
+                    <div class="loading-progress" id="loadingProgress"></div>
+                </div>
+                <div class="loading-subtitle" id="loadingSubtitle">Inicializando sistema...</div>
+            </div>
+        </div>
+
+        <!-- Background Animation -->
+        <div class="background-animation">
+            <div class="floating-shapes">
+                <div class="shape shape-1"></div>
+                <div class="shape shape-2"></div>
+                <div class="shape shape-3"></div>
+                <div class="shape shape-4"></div>
+                <div class="shape shape-5"></div>
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <nav class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <div class="logo-icon">
+                        <i class="fas fa-flag-checkered"></i>
+                    </div>
+                    <div class="logo-text">
+                        <span class="logo-title">Project Yako</span>
+                        <span class="logo-subtitle">Pro</span>
+                    </div>
+                </div>
+                <button class="sidebar-toggle" onclick="toggleSidebar()" title="Colapsar menú">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+            
+            <div class="sidebar-menu">
+                <div class="menu-section">
+                    <div class="menu-title">Principal</div>
+                    <a href="#" class="menu-item active" onclick="showSection('dashboard')" data-section="dashboard">
+                        <div class="menu-icon">
+                            <i class="fas fa-tachometer-alt"></i>
+                        </div>
+                        <span class="menu-text">Dashboard</span>
+                        <div class="menu-badge live">Live</div>
+                    </a>
+                    <a href="#" class="menu-item" onclick="showSection('pilotos')" data-section="pilotos">
+                        <div class="menu-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <span class="menu-text">Pilotos</span>
+                        <div class="menu-counter" id="pilotosCounter">0</div>
+                    </a>
+                </div>
+                
+                <div class="menu-section">
+                    <div class="menu-title">Análisis</div>
+                    <a href="#" class="menu-item" onclick="showSection('estadisticas')" data-section="estadisticas">
+                        <div class="menu-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <span class="menu-text">Estadísticas</span>
+                    </a>
+                    <a href="#" class="menu-item" onclick="showSection('historial')" data-section="historial">
+                        <div class="menu-icon">
+                            <i class="fas fa-history"></i>
+                        </div>
+                        <span class="menu-text">Historial</span>
+                    </a>
+                    <a href="#" class="menu-item" onclick="showSection('reportes')" data-section="reportes">
+                        <div class="menu-icon">
+                            <i class="fas fa-file-chart-line"></i>
+                        </div>
+                        <span class="menu-text">Reportes</span>
+                    </a>
+                </div>
+                
+                <div class="menu-section">
+                    <div class="menu-title">Sistema</div>
+                    <a href="#" class="menu-item" onclick="showSection('configuracion')" data-section="configuracion">
+                        <div class="menu-icon">
+                            <i class="fas fa-cog"></i>
+                        </div>
+                        <span class="menu-text">Configuración</span>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="sidebar-footer">
+                <div class="server-status">
+                    <div class="status-indicator online"></div>
+                    <span>Los Santos</span>
+                </div>
+                <div class="user-card">
+                    <div class="user-avatar">
+                        <img src="https://ui-avatars.com/api/?name=marioovlc&background=6366f1&color=fff&bold=true" alt="Avatar de marioovlc">
+                        <div class="user-status online"></div>
+                    </div>
+                    <div class="user-info">
+                        <div class="user-name">Driver</div>
+                        <div class="user-role">
+                            <i class="fas fa-crown"></i>
+                            Administrator
+                        </div>
+                    </div>
+                    <div class="user-menu">
+                        <button class="user-menu-btn" onclick="toggleUserMenu()" title="Menú de usuario">
+                            <i class="fas fa-ellipsis-v"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="header">
+                <div class="header-left">
+                    <button class="mobile-menu-btn" onclick="toggleSidebar()" title="Menú">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <div class="header-title">
+                        <h1 class="page-title" id="pageTitle">Dashboard</h1>
+                        <div class="breadcrumb">
+                            <span>Project Yako</span>
+                            <i class="fas fa-chevron-right"></i>
+                            <span id="currentSection">Dashboard</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="header-right">
+                    <div class="header-actions">
+                        <div class="search-box">
+                            <i class="fas fa-search"></i>
+                            <input type="text" placeholder="Buscar piloto..." id="searchInput" autocomplete="off">
+                            <div class="search-suggestions" id="searchSuggestions"></div>
+                        </div>
+                        
+                        <div class="header-stats">
+                            <div class="weather-widget">
+                                <i class="fas fa-sun"></i>
+                                <span>Los Santos - 28°C</span>
+                            </div>
+                            <div class="live-indicator">
+                                <div class="live-dot"></div>
+                                <span>En vivo</span>
+                            </div>
+                            <div class="live-time">
+                                <i class="fas fa-clock"></i>
+                                <span id="liveTime">14 Jul 2025, 12:17:30</span>
+                            </div>
+                        </div>
+                        
+                        <div class="action-buttons">
+                            <button class="btn btn-ghost" onclick="toggleNotifications()" title="Notificaciones">
+                                <i class="fas fa-bell"></i>
+                            </button>
+                            <button class="btn btn-secondary" onclick="exportarDatos()" title="Exportar datos">
+                                <i class="fas fa-download"></i>
+                                <span class="btn-text">Exportar</span>
+                            </button>
+                            <button class="btn btn-primary pulse" onclick="abrirModalRegistro()" title="Registrar nuevo piloto">
+                                <i class="fas fa-plus"></i>
+                                <span class="btn-text">Nuevo Piloto</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Dashboard Section -->
+            <section id="dashboard" class="section active">
+                <!-- Top Stats Summary -->
+                <div class="top-summary">
+                    <div class="summary-item">
+                        <div class="summary-value" id="totalPilotosHoy">0</div>
+                        <div class="summary-label">Pilotos Hoy</div>
+                    </div>
+                    <div class="summary-item">
+                        <div class="summary-value" id="recaudadoHoy">$0</div>
+                        <div class="summary-label">Recaudado Hoy</div>
+                    </div>
+                    <div class="summary-item">
+                        <div class="summary-value" id="carrerasActivas">0</div>
+                        <div class="summary-label">Carreras Activas</div>
+                    </div>
+                    <div class="summary-item">
+                        <div class="summary-value" id="promedioTiempo">--:--</div>
+                        <div class="summary-label">Tiempo Promedio</div>
+                    </div>
+                </div>
+
+                <!-- Stats Cards -->
+                <div class="stats-grid">
+                    <div class="stat-card primary animate__animated animate__fadeInUp">
+                        <div class="stat-header">
+                            <div class="stat-icon">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <div class="stat-actions">
+                                <button class="stat-action" onclick="showSection('pilotos')" title="Ver pilotos">
+                                    <i class="fas fa-arrow-right"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-number" id="dashTotalPilotos">0</div>
+                            <div class="stat-label">Pilotos Activos</div>
+                            <div class="stat-change positive">
+                                <i class="fas fa-arrow-up"></i>
+                                <span id="pilotosChange">+0 esta semana</span>
+                            </div>
+                        </div>
+                        <div class="stat-chart">
+                            <canvas id="pilotosChart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card success animate__animated animate__fadeInUp" style="animation-delay: 0.1s;">
+                        <div class="stat-header">
+                            <div class="stat-icon">
+                                <i class="fas fa-dollar-sign"></i>
+                            </div>
+                            <div class="stat-actions">
+                                <button class="stat-action" onclick="showSection('reportes')" title="Ver reportes">
+                                    <i class="fas fa-arrow-right"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-number" id="dashTotalRecaudado">$0</div>
+                            <div class="stat-label">Total Recaudado</div>
+                            <div class="stat-change positive">
+                                <i class="fas fa-arrow-up"></i>
+                                <span id="recaudadoChange">+$0 esta semana</span>
+                            </div>
+                        </div>
+                        <div class="stat-chart">
+                            <canvas id="recaudadoChart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card warning animate__animated animate__fadeInUp" style="animation-delay: 0.2s;">
+                        <div class="stat-header">
+                            <div class="stat-icon">
+                                <i class="fas fa-flag-checkered"></i>
+                            </div>
+                            <div class="stat-actions">
+                                <button class="stat-action" onclick="showSection('historial')" title="Ver historial">
+                                    <i class="fas fa-arrow-right"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-number" id="dashCompletadas">0</div>
+                            <div class="stat-label">Carreras Completadas</div>
+                            <div class="stat-change positive">
+                                <i class="fas fa-arrow-up"></i>
+                                <span id="completadasChange">+0 esta semana</span>
+                            </div>
+                        </div>
+                        <div class="stat-chart">
+                            <canvas id="completadasChart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card info animate__animated animate__fadeInUp" style="animation-delay: 0.3s;">
+                        <div class="stat-header">
+                            <div class="stat-icon">
+                                <i class="fas fa-trophy"></i>
+                            </div>
+                            <div class="stat-actions">
+                                <button class="stat-action" onclick="showSection('estadisticas')" title="Ver estadísticas">
+                                    <i class="fas fa-arrow-right"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-number" id="dashPrimeros">0</div>
+                            <div class="stat-label">Primeros Lugares</div>
+                            <div class="stat-change positive">
+                                <i class="fas fa-arrow-up"></i>
+                                <span id="primerosChange">+0 esta semana</span>
+                            </div>
+                        </div>
+                        <div class="stat-chart">
+                            <canvas id="primerosChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="quick-actions animate__animated animate__fadeInUp" style="animation-delay: 0.4s;">
+                    <div class="section-header">
+                        <h2><i class="fas fa-bolt"></i> Acciones Rápidas</h2>
+                        <p>Gestiona tus carreras de forma eficiente</p>
+                    </div>
+                    <div class="actions-grid">
+                        <div class="action-card" onclick="abrirModalRegistro()">
+                            <div class="action-icon primary">
+                                <i class="fas fa-user-plus"></i>
+                            </div>
+                            <div class="action-content">
+                                <h3>Registrar Piloto</h3>
+                                <p>Añadir nuevo piloto a la carrera actual</p>
+                            </div>
+                            <div class="action-arrow">
+                                <i class="fas fa-arrow-right"></i>
+                            </div>
+                        </div>
+                        
+                        <div class="action-card" onclick="showSection('estadisticas')">
+                            <div class="action-icon success">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <div class="action-content">
+                                <h3>Ver Estadísticas</h3>
+                                <p>Analizar rendimiento y métricas</p>
+                            </div>
+                            <div class="action-arrow">
+                                <i class="fas fa-arrow-right"></i>
+                            </div>
+                        </div>
+                        
+                        <div class="action-card" onclick="limpiarCarrera()">
+                            <div class="action-icon warning">
+                                <i class="fas fa-archive"></i>
+                            </div>
+                            <div class="action-content">
+                                <h3>Finalizar Carrera</h3>
+                                <p>Archivar carrera actual</p>
+                            </div>
+                            <div class="action-arrow">
+                                <i class="fas fa-arrow-right"></i>
+                            </div>
+                        </div>
+                        
+                        <div class="action-card" onclick="exportarDatos()">
+                            <div class="action-icon info">
+                                <i class="fas fa-download"></i>
+                            </div>
+                            <div class="action-content">
+                                <h3>Exportar Datos</h3>
+                                <p>Descargar información completa</p>
+                            </div>
+                            <div class="action-arrow">
+                                <i class="fas fa-arrow-right"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dashboard Grid -->
+                <div class="dashboard-grid">
+                    <!-- Recent Activity -->
+                    <div class="dashboard-card recent-activity">
+                        <div class="card-header">
+                            <h3><i class="fas fa-clock"></i> Actividad Reciente</h3>
+                            <button class="btn btn-ghost btn-sm" onclick="showSection('historial')">
+                                Ver todo
+                                <i class="fas fa-arrow-right"></i>
+                            </button>
+                        </div>
+                        <div class="card-content">
+                            <div class="activity-list" id="recentActivity">
+                                <div class="activity-empty">
+                                    <i class="fas fa-clock"></i>
+                                    <p>No hay actividad reciente</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Top Pilots -->
+                    <div class="dashboard-card top-pilots">
+                        <div class="card-header">
+                            <h3><i class="fas fa-star"></i> Mejores Pilotos</h3>
+                            <button class="btn btn-ghost btn-sm" onclick="showSection('estadisticas')">
+                                Ver ranking
+                                <i class="fas fa-arrow-right"></i>
+                            </button>
+                        </div>
+                        <div class="card-content">
+                            <div class="pilots-list" id="topPilots">
+                                <div class="pilots-empty">
+                                    <i class="fas fa-trophy"></i>
+                                    <p>No hay datos de pilotos</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quick Stats -->
+                    <div class="dashboard-card quick-stats-card">
+                        <div class="card-header">
+                            <h3><i class="fas fa-chart-pie"></i> Estadísticas Rápidas</h3>
+                        </div>
+                        <div class="card-content">
+                            <div class="stats-list">
+                                <div class="stat-row">
+                                    <span class="stat-label">🏎️ Supercars</span>
+                                    <span class="stat-value" id="statSupercars">0</span>
+                                </div>
+                                <div class="stat-row">
+                                    <span class="stat-label">🚗 Deportivos</span>
+                                    <span class="stat-value" id="statDeportivos">0</span>
+                                </div>
+                                <div class="stat-row">
+                                    <span class="stat-label">💪 Muscle</span>
+                                    <span class="stat-value" id="statMuscle">0</span>
+                                </div>
+                                <div class="stat-row">
+                                    <span class="stat-label">🏁 Tuners</span>
+                                    <span class="stat-value" id="statTuners">0</span>
+                                </div>
+                                <div class="stat-row">
+                                    <span class="stat-label">🚙 Off-Road</span>
+                                    <span class="stat-value" id="statOffRoad">0</span>
+                                </div>
+                                <div class="stat-row">
+                                    <span class="stat-label">🏍️ Motos</span>
+                                    <span class="stat-value" id="statMotos">0</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Pilotos Section -->
+            <section id="pilotos" class="section">
+                <div class="section-header">
+                    <div class="section-title">
+                        <h2><i class="fas fa-users"></i> Gestión de Pilotos</h2>
+                        <p>Administra todos los pilotos de la carrera actual</p>
+                    </div>
+                    <div class="section-actions">
+                        <div class="filter-controls">
+                            <div class="filter-tabs">
+                                <button class="filter-tab active" data-filter="all" onclick="setFilter('all')">
+                                    <i class="fas fa-list"></i>
+                                    Todos
+                                </button>
+                                <button class="filter-tab" data-filter="completed" onclick="setFilter('completed')">
+                                    <i class="fas fa-check-circle"></i>
+                                    Completados
+                                </button>
+                                <button class="filter-tab" data-filter="pending" onclick="setFilter('pending')">
+                                    <i class="fas fa-clock"></i>
+                                    Pendientes
+                                </button>
+                                <button class="filter-tab" data-filter="dnf" onclick="setFilter('dnf')">
+                                    <i class="fas fa-exclamation-triangle"></i>
+                                    DNF/DQ
+                                </button>
+                            </div>
+                        </div>
+                        <button class="btn btn-primary" onclick="abrirModalRegistro()">
+                            <i class="fas fa-plus"></i>
+                            Nuevo Piloto
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="table-card">
+                    <div class="table-header">
+                        <div class="table-title">
+                            <h3>Pilotos Registrados</h3>
+                            <div class="table-count">
+                                <span id="pilotosCount">0</span> pilotos
+                            </div>
+                        </div>
+                        <div class="table-actions">
+                            <button class="btn btn-ghost" onclick="selectAllPilotos()" title="Seleccionar todos">
+                                <i class="fas fa-check-square"></i>
+                            </button>
+                            <button class="btn btn-ghost" onclick="refreshTable()" title="Actualizar">
+                                <i class="fas fa-refresh"></i>
+                            </button>
+                            <button class="btn btn-ghost" onclick="toggleTableView()" title="Cambiar vista">
+                                <i class="fas fa-th" id="viewToggle"></i>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="table-container">
+                        <table id="pilotosTable" class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        <input type="checkbox" class="select-all" onchange="toggleSelectAll()">
+                                    </th>
+                                    <th>Nº</th>
+                                    <th>Piloto</th>
+                                    <th>Categoría</th>
+                                    <th>Entrada</th>
+                                    <th>Tiempo</th>
+                                    <th>Posición</th>
+                                    <th>Estado</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="pilotosTableBody">
+                                <tr class="empty-row">
+                                    <td colspan="9" class="empty-state">
+                                        <div class="empty-content">
+                                            <i class="fas fa-users"></i>
+                                            <h3>No hay pilotos registrados</h3>
+                                            <p>Registra tu primer piloto para comenzar</p>
+                                            <button class="btn btn-primary" onclick="abrirModalRegistro()">
+                                                <i class="fas fa-plus"></i>
+                                                Registrar Piloto
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Estadísticas Section -->
+            <section id="estadisticas" class="section">
+                <div class="section-header">
+                    <h2><i class="fas fa-chart-line"></i> Estadísticas Avanzadas</h2>
+                    <p>Análisis detallado del rendimiento de carreras</p>
+                </div>
+                
+                <div class="charts-grid">
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3>Distribución por Categorías</h3>
+                            <div class="chart-actions">
+                                <button class="btn btn-ghost btn-sm" onclick="downloadChart('category')" title="Descargar gráfico">
+                                    <i class="fas fa-download"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="categoryChart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3>Rendimiento por Tiempo</h3>
+                            <div class="chart-actions">
+                                <button class="btn btn-ghost btn-sm" onclick="downloadChart('performance')" title="Descargar gráfico">
+                                    <i class="fas fa-download"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="performanceChart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <div class="chart-card span-2">
+                        <div class="chart-header">
+                            <h3>Ingresos por Período</h3>
+                            <div class="chart-controls">
+                                <button class="btn btn-ghost" onclick="setTimeRange('7d')">7D</button>
+                                <button class="btn btn-ghost active" onclick="setTimeRange('30d')">30D</button>
+                                <button class="btn btn-ghost" onclick="setTimeRange('90d')">90D</button>
+                            </div>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="revenueChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Historial Section -->
+            <section id="historial" class="section">
+                <div class="section-header">
+                    <h2><i class="fas fa-history"></i> Historial de Carreras</h2>
+                    <p>Registro completo de todas las carreras archivadas</p>
+                </div>
+                
+                <div class="historial-filters">
+                    <div class="filter-group">
+                        <label>Fecha:</label>
+                        <input type="date" id="dateFilter" onchange="filterHistorial()">
+                    </div>
+                    <div class="filter-group">
+                        <label>Categoría:</label>
+                        <select id="categoryFilter" onchange="filterHistorial()">
+                            <option value="">Todas</option>
+                            <option value="Supercar">Supercar</option>
+                            <option value="Deportivo">Deportivo</option>
+                            <option value="Muscle">Muscle</option>
+                            <option value="Tuner">Tuner</option>
+                            <option value="Off-Road">Off-Road</option>
+                            <option value="Moto">Moto</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Piloto:</label>
+                        <input type="text" id="pilotFilter" placeholder="Buscar piloto..." onkeyup="filterHistorial()">
+                    </div>
+                </div>
+                
+                <div class="history-table">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Fecha</th>
+                                <th>Piloto</th>
+                                <th>Categoría</th>
+                                <th>Vehículo</th>
+                                <th>Tiempo</th>
+                                <th>Posición</th>
+                                <th>Entrada</th>
+                                <th>Notas</th>
+                            </tr>
+                        </thead>
+                        <tbody id="historialTableBody">
+                            <tr class="empty-row">
+                                <td colspan="8" class="empty-state">
+                                    <div class="empty-content">
+                                        <i class="fas fa-history"></i>
+                                        <h3>No hay historial</h3>
+                                        <p>Las carreras archivadas aparecerán aquí</p>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Configuración Section -->
+            <section id="configuracion" class="section">
+                <div class="section-header">
+                    <h2><i class="fas fa-cog"></i> Configuración del Sistema</h2>
+                    <p>Personaliza tu experiencia de gestión</p>
+                </div>
+                
+                <div class="settings-grid">
+                    <div class="settings-card">
+                        <div class="settings-header">
+                            <h3>🎨 Apariencia</h3>
+                        </div>
+                        <div class="settings-content">
+                            <div class="setting-item">
+                                <label>Tema</label>
+                                <select id="themeSelect" onchange="changeTheme()">
+                                    <option value="dark">Oscuro</option>
+                                    <option value="light">Claro</option>
+                                    <option value="auto">Automático</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="settings-card">
+                        <div class="settings-header">
+                            <h3>💾 Datos</h3>
+                        </div>
+                        <div class="settings-content">
+                            <div class="setting-item">
+                                <button class="btn btn-primary" onclick="exportarDatos()">
+                                    <i class="fas fa-download"></i>
+                                    Exportar Datos
+                                </button>
+                            </div>
+                            <div class="setting-item">
+                                <button class="btn btn-danger" onclick="resetearSistema()">
+                                    <i class="fas fa-trash"></i>
+                                    Resetear Sistema
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Modal para Registrar Piloto -->
+    <div id="registroModal" class="modal-overlay">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h2>
+                    <i class="fas fa-user-plus"></i>
+                    Registrar Nuevo Piloto
+                </h2>
+                <button class="modal-close" onclick="cerrarModal()" title="Cerrar">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="modal-body">
+                <form id="registroForm" class="form-modern">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="pilotoNombre">
+                                <i class="fas fa-user"></i>
+                                Nombre del Piloto *
+                            </label>
+                            <input type="text" id="pilotoNombre" required placeholder="Ej: SpeedRacer" autocomplete="off">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="pilotoCategoria">
+                                <i class="fas fa-car"></i>
+                                Categoría *
+                            </label>
+                            <select id="pilotoCategoria" required>
+                                <option value="">Seleccionar categoría...</option>
+                                <option value="Supercar">🏎️ Supercar</option>
+                                <option value="Deportivo">🚗 Deportivo</option>
+                                <option value="Muscle">💪 Muscle</option>
+                                <option value="Tuner">🏁 Tuner</option>
+                                <option value="Off-Road">🚙 Off-Road</option>
+                                <option value="Moto">🏍️ Moto</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="pilotoEntrada">
+                                <i class="fas fa-dollar-sign"></i>
+                                Entrada ($) *
+                            </label>
+                            <input type="number" id="pilotoEntrada" required placeholder="500" min="0" autocomplete="off">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="pilotoTiempo">
+                                <i class="fas fa-stopwatch"></i>
+                                Tiempo (opcional)
+                            </label>
+                            <input type="text" id="pilotoTiempo" placeholder="02:15.340" autocomplete="off">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="pilotoPosicion">
+                                <i class="fas fa-trophy"></i>
+                                Posición
+                            </label>
+                            <select id="pilotoPosicion">
+                                <option value="">Sin posición</option>
+                                <option value="1°">🥇 1° Lugar</option>
+                                <option value="2°">🥈 2° Lugar</option>
+                                <option value="3°">🥉 3° Lugar</option>
+                                <option value="4°">4° Lugar</option>
+                                <option value="5°">5° Lugar</option>
+                                <option value="6°">6° Lugar</option>
+                                <option value="7°">7° Lugar</option>
+                                <option value="8°">8° Lugar</option>
+                                <option value="9°">9° Lugar</option>
+                                <option value="10°">10° Lugar</option>
+                                <option value="DNF">❌ DNF</option>
+                                <option value="DQ">🚫 DQ</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="pilotoVehiculo">
+                                <i class="fas fa-car-side"></i>
+                                Vehículo (opcional)
+                            </label>
+                            <input type="text" id="pilotoVehiculo" placeholder="Ej: Adder, Zentorno" autocomplete="off">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="pilotoNotas">
+                            <i class="fas fa-sticky-note"></i>
+                            Notas
+                        </label>
+                        <textarea id="pilotoNotas" placeholder="Observaciones de la carrera..."></textarea>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" onclick="cerrarModal()">
+                            <i class="fas fa-times"></i>
+                            Cancelar
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-plus"></i>
+                            Registrar Piloto
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notifications Container -->
+    <div id="notificationsContainer" class="notifications-container"></div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
